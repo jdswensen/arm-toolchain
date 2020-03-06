@@ -1,11 +1,28 @@
+# Toolchain directory
+set(TOOLCHAIN_DIR $ENV{ARMGCC_DIR})
+string(REGEX REPLACE "\\\\" "/" TOOLCHAIN_DIR "${TOOLCHAIN_DIR}")
+
+IF(NOT TOOLCHAIN_DIR)
+    MESSAGE(FATAL_ERROR "***Please set ARMGCC_DIR in envionment variables***")
+ENDIF()
+
+message(STATUS "Toolchain-directory: ${TOOLCHAIN_DIR}")
+
+# TARGET_TRIPLET
+SET(TARGET_TRIPLET "arm-none-eabi")
+
+set(TOOLCHAIN_BIN_DIR ${TOOLCHAIN_DIR}/bin)
+set(TOOLCHAIN_INC_DIR ${TOOLCHAIN_DIR}/${TARGET_TRIPLET}/include)
+set(TOOLCHAIN_LIB_DIR ${TOOLCHAIN_DIR}/${TARGET_TRIPLET}/lib)
+
 # Toolchain settings
-set(CMAKE_C_COMPILER    arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER  arm-none-eabi-g++)
-set(AS                  arm-none-eabi-as)
-set(AR                  arm-none-eabi-ar)
-set(OBJCOPY             arm-none-eabi-objcopy)
-set(OBJDUMP             arm-none-eabi-objdump)
-set(SIZE                arm-none-eabi-size)
+set(CMAKE_C_COMPILER    ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-gcc)
+set(CMAKE_CXX_COMPILER  ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-g++)
+set(AS                  ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-as)
+set(AR                  ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-ar)
+set(OBJCOPY             ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-objcopy)
+set(OBJDUMP             ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-objdump)
+set(SIZE                ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-size)
 
 set(CMAKE_C_FLAGS   "${MCPU_FLAGS} ${VFP_FLAGS} -Wall -fno-builtin -fdata-sections -ffunction-sections" CACHE INTERNAL "c compiler flags")
 set(CMAKE_CXX_FLAGS "${MCPU_FLAGS} ${VFP_FLAGS} -Wall -fno-builtin -fdata-sections -ffunction-sections" CACHE INTERNAL "cxx compiler flags")
